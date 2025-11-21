@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ artwork.title }} - Azam Kashefikia{% endblock %}
+
+{% block content %}
+<section class="artwork-detail">
+  <div class="detail-container">
+    <div class="detail-grid">
+      <!-- Artwork Image -->
+      <div class="detail-image-section">
+        <img src="{{ artwork.image.url }}" alt="{{ artwork.title }}" class="detail-image">
+      </div>
+
+      <!-- Artwork Information -->
+      <div class="detail-info-section">
+        <h1 class="detail-title">{{ artwork.title }}</h1>
+        
+        {% if artwork.year_created %}
+          <p class="detail-year">{{ artwork.year_created }}</p>
+        {% endif %}
+
+        <div class="detail-description">
+          {{ artwork.description|safe }}
+        </div>
+
+        <div class="detail-specs">
+          {% if artwork.medium %}
+            <div class="spec-item">
+              <span class="spec-label">Medium:</span>
+              <span class="spec-value">{{ artwork.medium }}</span>
+            </div>
+          {% endif %}
+
+          {% if artwork.dimension %}
+            <div class="spec-item">
+              <span class="spec-label">Dimensions:</span>
+              <span class="spec-value">{{ artwork.dimension }}</span>
+            </div>
+          {% endif %}
+
+          <div class="spec-item">
+            <span class="spec-label">Availability:</span>
+            <span class="spec-value spec-availability spec-{{ artwork.availability }}">
+              {{ artwork.get_availability_display }}
+            </span>
+          </div>
+
+          {% if artwork.price and artwork.availability == 'available' %}
+            <div class="spec-item">
+              <span class="spec-label">Price:</span>
+              <span class="spec-value spec-price">${{ artwork.price }}</span>
+            </div>
+          {% endif %}
+
+          {% if artwork.series %}
+            <div class="spec-item">
+              <span class="spec-label">Series:</span>
+              <span class="spec-value">{{ artwork.series.title }}</span>
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="detail-actions">
+          <a href="{% url 'gallery' %}" class="btn btn-secondary">← Back to Gallery</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

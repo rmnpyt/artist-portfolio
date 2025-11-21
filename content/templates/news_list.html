@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}News - Azam Kashefikia{% endblock %}
+
+{% block content %}
+<!-- News Header -->
+<section class="gallery-header">
+  <div class="gallery-header-content">
+    <h1 class="gallery-main-title">News</h1>
+    <p class="gallery-subtitle">Latest updates and stories</p>
+  </div>
+</section>
+
+<!-- News List Section -->
+<section class="news-section">
+  <div class="news-container">
+    {% if news_posts %}
+      <div class="news-grid">
+        {% for news in news_posts %}
+          <article class="news-card">
+            {% if news.cover_image %}
+              <a href="{% url 'news_detail' news.slug %}" class="news-image-wrapper">
+                <img src="{{ news.cover_image.url }}" alt="{{ news.title }}" class="news-image">
+              </a>
+            {% endif %}
+            
+            <div class="news-content">
+              <div class="news-meta">
+                <span class="news-date">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                  {% if news.published_at %}
+                    {{ news.published_at|date:"F d, Y" }}
+                  {% else %}
+                    {{ news.created_at|date:"F d, Y" }}
+                  {% endif %}
+                </span>
+              </div>
+              
+              <h2 class="news-title">
+                <a href="{% url 'news_detail' news.slug %}">{{ news.title }}</a>
+              </h2>
+              
+              {% if news.excerpt %}
+                <p class="news-excerpt">{{ news.excerpt|truncatewords:25 |safe }}</p>
+              {% else %}
+                <p class="news-excerpt">{{ news.body|striptags|truncatewords:25|safe }}</p>
+              {% endif %}
+              
+              <a href="{% url 'news_detail' news.slug %}" class="news-read-more">
+                Continue Reading
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </a>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="no-news">
+        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 3h18v18H3zM3 9h18M9 21V9"></path>
+        </svg>
+        <h3>No News Available</h3>
+        <p>Check back soon for the latest updates and stories.</p>
+      </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

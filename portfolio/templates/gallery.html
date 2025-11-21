@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Gallery - Azam Kashefikia{% endblock %}
+
+{% block content %}
+<!-- Gallery Header -->
+<section class="gallery-header">
+  <div class="gallery-header-content">
+    <h1 class="gallery-main-title">Art Gallery</h1>
+    <p class="gallery-subtitle">Explore my collection of artworks</p>
+  </div>
+</section>
+
+<!-- Filter Section -->
+<section class="gallery-filters">
+  <div class="filters-container">
+    <button class="filter-btn active" data-filter="all">All</button>
+    {% for s in series %}
+      <button class="filter-btn" data-filter="{{ s.slug }}">{{ s.title }}</button>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- Gallery Grid -->
+<section class="gallery-grid-section">
+  <div class="gallery-container">
+    <div class="gallery-grid" id="galleryGrid">
+      {% for artwork in artworks %}
+        <a href="{% url 'artwork_detail' artwork.slug %}" 
+           class="gallery-item" 
+           data-series="{% if artwork.series %}{{ artwork.series.slug }}{% else %}none{% endif %}">
+          <div class="gallery-image-wrapper">
+            <img src="{{ artwork.image.url }}" alt="{{ artwork.title }}" class="gallery-image" loading="lazy">
+            <div class="gallery-overlay">
+              <div class="gallery-info">
+                <h3 class="gallery-artwork-title">{{ artwork.title }}</h3>
+                {% if artwork.year_created %}
+                  <p class="gallery-artwork-year">{{ artwork.year_created }}</p>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </a>
+      {% empty %}
+        <p class="no-artworks">No artworks available at the moment.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<script>
+// Gallery Filter Functionality
+document.addEventListener('DOMContentLoaded', function() {
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const galleryItems = document.querySelectorAll('.gallery-item');
+  
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', function() {
+      const filter = this.getAttribute('data-filter');
+      
+      // Update active button
+      filterBtns.forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      
+      // Filter items with fade animation
+      galleryItems.forEach(item => {
+        const itemSeries = item.getAttribute('data-series');
+        
+        if (filter === 'all' || itemSeries === filter) {
+          item.style.display = 'block';
+          setTimeout(() => {
+            item.style.opacity = '1';
+            item.style.transform = 'scale(1)';
+          }, 10);
+        } else {
+          item.style.opacity = '0';
+          item.style.transform = 'scale(0.8)';
+          setTimeout(() => {
+            item.style.display = 'none';
+          }, 300);
+        }
+      });
+    });
+  });
+});
+</script>
+
+{% endblock %}

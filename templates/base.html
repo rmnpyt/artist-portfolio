@@ -1,0 +1,173 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Azam Kashefikia{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    {% load static %}
+
+    <header class="main-header">
+    <nav class="navbar">
+        <!-- Hamburger (visible on small screens) -->
+        <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+        </button>
+
+        <!-- Left side: main menu -->
+        <ul class="nav-menu" id="nav-menu">
+        <li><a href="{% url 'home' %}">Home</a></li>
+        <li><a href="{% url 'gallery' %}">Gallery</a></li>
+        <li><a href="{% url 'events_list' %}">Events</a></li>
+        <li><a href="{% url 'news_list' %}">Blog</a></li>
+        <li><a href="{% url 'about' %}">About</a></li>
+        <li><a href="{% url 'contact' %}">Contact</a></li>
+        <!-- Example with submenu -->
+        <!-- <li class="has-submenu">
+            <a href="#">Art Works</a>
+            <ul class="submenu">
+            <li><a href="#">Service 1</a></li>
+            <li><a href="#">Service 2</a></li>
+            <li><a href="#">Service 3</a></li>
+            </ul>
+        </li> -->
+
+        
+        </ul>
+
+        <!-- Right side: logo -->
+        <a href="{% url 'home' %}" class="logo">
+        <img src="{% static 'img/logo-150x100.png' %}" alt="Logo">
+        </a>
+    </nav>
+    </header>
+    {% if messages %}
+    <div class="messages" role="status" aria-live="polite">
+        {% for message in messages %}
+        <div class="message {{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- JS -->
+    <script src="{% static 'js/base.js' %}"></script>
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <!-- Slider init -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+        const heroSwiper = new Swiper(".hero-slider", {
+            loop: true,
+            speed: 800,
+            autoplay: {
+            delay: 5000,
+            disableOnInteraction: false,
+            },
+            pagination: {
+            el: ".hero-pagination",
+            clickable: true,
+            },
+            navigation: {
+            nextEl: ".hero-next",
+            prevEl: ".hero-prev",
+            },
+            effect: "slide",
+        });
+        });
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+<footer class="site-footer">
+    <div class="footer-container">
+        <!-- Bio Section -->
+        <div class="footer-section footer-bio">
+            <h3>Azam Kashefikia</h3>
+            <p>Painter & Mixed-Media Artist based in Québec.</p>
+        </div>
+
+        <!-- Quick Navigation -->
+        <div class="footer-section footer-nav">
+            <h4>Quick Links</h4>
+            <ul>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'gallery' %}">Gallery</a></li>
+                <li><a href="{% url 'events_list' %}">Events</a></li>
+                <li><a href="{% url 'news_list' %}">Blog</a></li>
+                <li><a href="{% url 'about' %}">About</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </div>
+
+        <!-- Contact Information -->
+        <div class="footer-section footer-contact">
+            <h4>Contact</h4>
+            <p>Québec, QC</p>
+            <p><a href="mailto:art@azamkashefikia.com">art@azamkashefikia.com</a></p>
+        </div>
+
+        <!-- Newsletter Section -->
+        <div class="footer-section footer-newsletter">
+            <h4>Newsletter</h4>
+            <p>Join my mailing list for new artwork & exhibition updates.</p>
+            <form class="newsletter-form" method="post" action="{% url 'newsletter_subscribe' %}">
+                {% csrf_token %}
+                <input type="email" name="email" placeholder="Your email" required>
+                <button type="submit">Subscribe</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Bottom Bar -->
+    <div class="footer-bottom">
+        <div class="footer-bottom-container">
+            <!-- Social Media Icons -->
+            <div class="footer-social">
+                <a href="#" aria-label="Instagram" target="_blank" rel="noopener">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                    </svg>
+                </a>
+                <a href="#" aria-label="Facebook" target="_blank" rel="noopener">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                    </svg>
+                </a>
+                <a href="#" aria-label="Pinterest" target="_blank" rel="noopener">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="2" x2="12" y2="22"></line>
+                        <path d="M12 2a7 7 0 0 0-7 9c0 3 1 5 3 7 1 1 2 1 2 0s0-2-1-3-1-2-1-3a5 5 0 1 1 10 0c0 1 0 2-1 3s-1 2-1 3 1 1 2 0c2-2 3-4 3-7a7 7 0 0 0-7-9z"></path>
+                    </svg>
+                </a>
+            </div>
+
+            <!-- Copyright -->
+            <div class="footer-copyright">
+                <p>© 2025 Azam Kashefikia. All artworks and images © their respective owner.</p>
+            </div>
+
+            <!-- Language Switcher -->
+            <div class="footer-language">
+                <span class="active">English</span>
+                <span class="separator">|</span>
+                <span class="coming-soon">Français <small>(Coming soon)</small></span>
+            </div>
+        </div>
+    </div>
+</footer>
+</html>

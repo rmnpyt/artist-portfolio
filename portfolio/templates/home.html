@@ -1,0 +1,291 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Azam Kashefikia - Art Portfolio{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <div class="swiper hero-slider">
+    <div class="swiper-wrapper">
+
+      <!-- Slide 1 -->
+      <div class="swiper-slide hero-slide"
+           style="background-image: url('{% static "img/azam.kashefi.jpg" %}');">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+          <p class="hero-kicker">I'm</p>
+          <h1 class="hero-title">Azam Kashefikia</h1>
+          <!-- <p class="hero-subtitle">
+            Painter & craft artist creating expressive figurative works.
+          </p> -->
+          <a href="{% url 'about' %}" class="hero-btn">About Me</a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Pagination dots -->
+    <div class="swiper-pagination hero-pagination"></div>
+
+    <!-- Navigation arrows -->
+    <div class="swiper-button-prev hero-prev"></div>
+    <div class="swiper-button-next hero-next"></div>
+  </div>
+</section>
+
+<!-- Featured Artworks Section -->
+<section class="featured-artworks">
+  <div class="featured-container">
+    <h2 class="featured-title">Art Works</h2>
+    
+    <div class="artworks-scroll-wrapper">
+      <button class="scroll-arrow scroll-arrow-left" id="scrollLeft" aria-label="Scroll left">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      </button>
+      
+      <div class="artworks-scroll-container" id="artworksContainer">
+      <div class="artworks-grid">
+        {% for artwork in featured_artworks %}
+          <a href="{% url 'artwork_detail' artwork.slug %}" class="artwork-card">
+            <div class="artwork-image-wrapper">
+              <img src="{{ artwork.image.url }}" alt="{{ artwork.title }}" class="artwork-image">
+              <div class="artwork-overlay">
+                <span class="view-details">View Details</span>
+              </div>
+            </div>
+            <div class="artwork-info">
+              <h3 class="artwork-title">{{ artwork.title }}</h3>
+              {% if artwork.year_created %}
+                <p class="artwork-year">{{ artwork.year_created }}</p>
+              {% endif %}
+            </div>
+          </a>
+        {% empty %}
+          <p class="no-artworks">No featured artworks available at the moment.</p>
+        {% endfor %}
+      </div>
+      
+      <button class="scroll-arrow scroll-arrow-right" id="scrollRight" aria-label="Scroll right">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- Recent Events Section -->
+<section class="featured-artworks">
+  <div class="featured-container">
+    <h2 class="featured-title">Recent Events</h2>
+    
+    <div class="artworks-scroll-wrapper">
+      <button class="scroll-arrow scroll-arrow-left" id="scrollLeftEvents" aria-label="Scroll left">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      </button>
+      
+      <div class="artworks-scroll-container" id="eventsContainer">
+        <div class="artworks-grid">
+          {% for event in recent_events %}
+            <a href="{% url 'event_detail' event.slug %}" class="artwork-card">
+              <div class="artwork-image-wrapper">
+                {% if event.cover_image %}
+                  <img src="{{ event.cover_image.url }}" alt="{{ event.title }}" class="artwork-image">
+                {% else %}
+                  <img src="{% static 'img/default-event.jpg' %}" alt="{{ event.title }}" class="artwork-image">
+                {% endif %}
+                <div class="artwork-overlay">
+                  <span class="view-details">View Details</span>
+                </div>
+              </div>
+              <div class="artwork-info">
+                <h3 class="artwork-title">{{ event.title }}</h3>
+                {% if event.start_date %}
+                  <p class="artwork-year">{{ event.start_date|date:"M d, Y" }}</p>
+                {% endif %}
+                <p class="artwork-year" style="text-transform: capitalize;">{{ event.get_post_type_display }}</p>
+              </div>
+            </a>
+          {% empty %}
+            <p class="no-artworks">No upcoming events at the moment.</p>
+          {% endfor %}
+        </div>
+      </div>
+      
+      <button class="scroll-arrow scroll-arrow-right" id="scrollRightEvents" aria-label="Scroll right">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+<script>
+// Featured Artworks Scroll Navigation
+document.addEventListener('DOMContentLoaded', function() {
+  const container = document.getElementById('artworksContainer');
+  const leftBtn = document.getElementById('scrollLeft');
+  const rightBtn = document.getElementById('scrollRight');
+  
+  if (container && leftBtn && rightBtn) {
+    const scrollAmount = 340; // Card width (320px) + gap (20px)
+    
+    // Smooth scroll function
+    function smoothScroll(element, target, duration) {
+      const start = element.scrollLeft;
+      const change = target - start;
+      const startTime = performance.now();
+      
+      function animation(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        
+        // Easing function (easeInOutQuad)
+        const ease = progress < 0.5 
+          ? 2 * progress * progress 
+          : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+        
+        element.scrollLeft = start + (change * ease);
+        
+        if (progress < 1) {
+          requestAnimationFrame(animation);
+        }
+      }
+      
+      requestAnimationFrame(animation);
+    }
+    
+    // Scroll left
+    leftBtn.addEventListener('click', function() {
+      const targetScroll = Math.max(0, container.scrollLeft - scrollAmount);
+      smoothScroll(container, targetScroll, 400);
+    });
+    
+    // Scroll right
+    rightBtn.addEventListener('click', function() {
+      const maxScroll = container.scrollWidth - container.clientWidth;
+      const targetScroll = Math.min(maxScroll, container.scrollLeft + scrollAmount);
+      smoothScroll(container, targetScroll, 400);
+    });
+    
+    // Update button visibility based on scroll position
+    function updateButtonStates() {
+      const maxScroll = container.scrollWidth - container.clientWidth;
+      
+      // Hide left button at start
+      if (container.scrollLeft <= 0) {
+        leftBtn.style.opacity = '0';
+        leftBtn.style.pointerEvents = 'none';
+      } else {
+        leftBtn.style.opacity = '1';
+        leftBtn.style.pointerEvents = 'auto';
+      }
+      
+      // Hide right button at end
+      if (container.scrollLeft >= maxScroll - 5) {
+        rightBtn.style.opacity = '0';
+        rightBtn.style.pointerEvents = 'none';
+      } else {
+        rightBtn.style.opacity = '1';
+        rightBtn.style.pointerEvents = 'auto';
+      }
+    }
+    
+    // Update on scroll
+    container.addEventListener('scroll', updateButtonStates);
+    
+    // Initial update
+    updateButtonStates();
+    
+    // Update on window resize
+    window.addEventListener('resize', updateButtonStates);
+  }
+});
+
+// Recent Events Scroll Navigation
+document.addEventListener('DOMContentLoaded', function() {
+  const container = document.getElementById('eventsContainer');
+  const leftBtn = document.getElementById('scrollLeftEvents');
+  const rightBtn = document.getElementById('scrollRightEvents');
+  
+  if (container && leftBtn && rightBtn) {
+    const scrollAmount = 340; // Card width (320px) + gap (20px)
+    
+    // Smooth scroll function
+    function smoothScroll(element, target, duration) {
+      const start = element.scrollLeft;
+      const change = target - start;
+      const startTime = performance.now();
+      
+      function animation(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        
+        // Easing function (easeInOutQuad)
+        const ease = progress < 0.5 
+          ? 2 * progress * progress 
+          : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+        
+        element.scrollLeft = start + (change * ease);
+        
+        if (progress < 1) {
+          requestAnimationFrame(animation);
+        }
+      }
+      
+      requestAnimationFrame(animation);
+    }
+    
+    // Scroll left
+    leftBtn.addEventListener('click', function() {
+      const targetScroll = Math.max(0, container.scrollLeft - scrollAmount);
+      smoothScroll(container, targetScroll, 400);
+    });
+    
+    // Scroll right
+    rightBtn.addEventListener('click', function() {
+      const maxScroll = container.scrollWidth - container.clientWidth;
+      const targetScroll = Math.min(maxScroll, container.scrollLeft + scrollAmount);
+      smoothScroll(container, targetScroll, 400);
+    });
+    
+    // Update button visibility based on scroll position
+    function updateButtonStates() {
+      const maxScroll = container.scrollWidth - container.clientWidth;
+      
+      // Hide left button at start
+      if (container.scrollLeft <= 0) {
+        leftBtn.style.opacity = '0';
+        leftBtn.style.pointerEvents = 'none';
+      } else {
+        leftBtn.style.opacity = '1';
+        leftBtn.style.pointerEvents = 'auto';
+      }
+      
+      // Hide right button at end
+      if (container.scrollLeft >= maxScroll - 5) {
+        rightBtn.style.opacity = '0';
+        rightBtn.style.pointerEvents = 'none';
+      } else {
+        rightBtn.style.opacity = '1';
+        rightBtn.style.pointerEvents = 'auto';
+      }
+    }
+    
+    // Update on scroll
+    container.addEventListener('scroll', updateButtonStates);
+    
+    // Initial update
+    updateButtonStates();
+    
+    // Update on window resize
+    window.addEventListener('resize', updateButtonStates);
+  }
+});
+</script>
+{% endblock %}

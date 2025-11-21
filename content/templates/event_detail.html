@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ event.title }} - Azam Kashefikia{% endblock %}
+
+{% block content %}
+<!-- Event Detail Header -->
+<section class="post-detail-header">
+  <div class="post-detail-header-content">
+    <div class="post-type-badge event-type-{{ event.post_type }}">
+      {{ event.get_post_type_display }}
+    </div>
+    <h1 class="post-detail-title">{{ event.title }}</h1>
+    
+    <div class="post-detail-meta">
+      {% if event.start_date %}
+        <span class="post-meta-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+          </svg>
+          {{ event.start_date|date:"F d, Y" }}
+          {% if event.end_date and event.end_date != event.start_date %}
+            - {{ event.end_date|date:"F d, Y" }}
+          {% endif %}
+        </span>
+      {% endif %}
+      
+      {% if event.location_name %}
+        <span class="post-meta-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+            <circle cx="12" cy="10" r="3"></circle>
+          </svg>
+          {{ event.location_name }}
+        </span>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<!-- Event Content -->
+<section class="event-detail-content-section">
+  <div class="event-detail-container">
+    <!-- Event Cover Image (Sticky) -->
+    {% if event.cover_image %}
+    <div class="event-detail-image-wrapper">
+      <img src="{{ event.cover_image.url }}" alt="{{ event.title }}" class="event-detail-image">
+    </div>
+    {% endif %}
+    
+    <!-- Event Body Content -->
+    <div class="event-detail-body-wrapper">
+      <article class="event-detail-content">
+      {% if event.location_address %}
+        <div class="event-location-details">
+          <h3>Location</h3>
+          <p>{{ event.location_address }}</p>
+        </div>
+      {% endif %}
+      
+      <div class="post-body">
+        {{ event.body|safe }}
+      </div>
+      
+      {% if event.external_link %}
+        <div class="event-external-link-section">
+          <a href="{{ event.external_link }}" target="_blank" rel="noopener noreferrer" class="event-external-link-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+              <polyline points="15 3 21 3 21 9"></polyline>
+              <line x1="10" y1="14" x2="21" y2="3"></line>
+            </svg>
+            Visit Event Page
+          </a>
+        </div>
+      {% endif %}
+      </article>
+      
+      <!-- Related Events Sidebar -->
+      {% if related_events %}
+      <aside class="event-detail-sidebar">
+      <h3 class="sidebar-title">Related Events</h3>
+      <div class="related-posts-list">
+        {% for related in related_events %}
+          <article class="related-post-item">
+            {% if related.cover_image %}
+              <a href="{% url 'event_detail' related.slug %}" class="related-post-image">
+                <img src="{{ related.cover_image.url }}" alt="{{ related.title }}">
+              </a>
+            {% endif %}
+            <div class="related-post-content">
+              <span class="related-post-type">{{ related.get_post_type_display }}</span>
+              <h4 class="related-post-title">
+                <a href="{% url 'event_detail' related.slug %}">{{ related.title }}</a>
+              </h4>
+              {% if related.start_date %}
+                <span class="related-post-date">{{ related.start_date|date:"M d, Y" }}</span>
+              {% endif %}
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+      <a href="{% url 'events_list' %}" class="sidebar-view-all">View All Events →</a>
+      </aside>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<!-- Back to Events -->
+<section class="post-navigation">
+  <div class="post-navigation-container">
+    <a href="{% url 'events_list' %}" class="back-link">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12"></line>
+        <polyline points="12 19 5 12 12 5"></polyline>
+      </svg>
+      Back to Events
+    </a>
+  </div>
+</section>
+{% endblock %}

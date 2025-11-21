@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ news.title }} - Azam Kashefikia{% endblock %}
+
+{% block content %}
+<!-- News Detail Header -->
+<section class="post-detail-header">
+  <div class="post-detail-header-content">
+    <div class="post-type-badge news-badge">
+      News
+    </div>
+    <h1 class="post-detail-title">{{ news.title }}</h1>
+    
+    <div class="post-detail-meta">
+      <span class="post-meta-item">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+        {% if news.published_at %}
+          {{ news.published_at|date:"F d, Y" }}
+        {% else %}
+          {{ news.created_at|date:"F d, Y" }}
+        {% endif %}
+      </span>
+    </div>
+  </div>
+</section>
+
+<!-- News Content -->
+<section class="news-detail-content-section">
+  <div class="news-detail-container">
+    <!-- News Cover Image (Sticky) -->
+    {% if news.cover_image %}
+    <div class="news-detail-image-wrapper">
+      <img src="{{ news.cover_image.url }}" alt="{{ news.title }}" class="news-detail-image">
+    </div>
+    {% endif %}
+    
+    <!-- News Body Content -->
+    <div class="news-detail-body-wrapper">
+      <article class="news-detail-content">
+      <div class="post-body">
+        {{ news.body|safe }}
+      </div>
+      
+      {% if news.external_link %}
+        <div class="news-external-link-section">
+          <a href="{{ news.external_link }}" target="_blank" rel="noopener noreferrer" class="news-external-link-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+              <polyline points="15 3 21 3 21 9"></polyline>
+              <line x1="10" y1="14" x2="21" y2="3"></line>
+            </svg>
+            Read More at Source
+          </a>
+        </div>
+      {% endif %}
+      </article>
+      
+      <!-- Related News Sidebar -->
+      {% if related_news %}
+      <aside class="news-detail-sidebar">
+      <h3 class="sidebar-title">Related News</h3>
+      <div class="related-posts-list">
+        {% for related in related_news %}
+          <article class="related-post-item">
+            {% if related.cover_image %}
+              <a href="{% url 'news_detail' related.slug %}" class="related-post-image">
+                <img src="{{ related.cover_image.url }}" alt="{{ related.title }}">
+              </a>
+            {% endif %}
+            <div class="related-post-content">
+              <span class="related-post-type">News</span>
+              <h4 class="related-post-title">
+                <a href="{% url 'news_detail' related.slug %}">{{ related.title }}</a>
+              </h4>
+              <span class="related-post-date">
+                {% if related.published_at %}
+                  {{ related.published_at|date:"M d, Y" }}
+                {% else %}
+                  {{ related.created_at|date:"M d, Y" }}
+                {% endif %}
+              </span>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+      <a href="{% url 'news_list' %}" class="sidebar-view-all">View All News →</a>
+      </aside>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<!-- Back to News -->
+<section class="post-navigation">
+  <div class="post-navigation-container">
+    <a href="{% url 'news_list' %}" class="back-link">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12"></line>
+        <polyline points="12 19 5 12 12 5"></polyline>
+      </svg>
+      Back to News
+    </a>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}About - {{ profile.full_name }}{% endblock %}
+
+{% block content %}
+<!-- About Header (same style as gallery) -->
+<section class="gallery-header">
+  <div class="gallery-header-content">
+    <h1 class="gallery-main-title">About Azam</h1>
+    <p class="gallery-subtitle">Artist, Educator, Creator</p>
+  </div>
+</section>
+
+<!-- About Content Section -->
+<section class="about-content-section">
+  <div class="about-container">
+    <!-- Portrait Image (sticky on desktop) -->
+    <div class="about-image-wrapper">
+      {% if profile.portrait %}
+        <img src="{{ profile.portrait.url }}" alt="{{ profile.full_name }}" class="about-portrait">
+      {% else %}
+        <div class="about-portrait-placeholder">
+          <span>{{ profile.full_name|slice:":1" }}</span>
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- Bio Content -->
+    <div class="about-bio-wrapper">
+      <div class="about-bio-content">
+        <h2 class="about-name">{{ profile.full_name }}</h2>
+        
+        {% if profile.long_bio %}
+          <div class="about-bio-text">
+            {{ profile.long_bio|safe }}
+          </div>
+        {% elif profile.short_bio %}
+          <div class="about-bio-text">
+            {{ profile.short_bio|safe }}
+          </div>
+        {% endif %}
+
+        <!-- Awards Section -->
+        {% if awards %}
+        <div class="about-awards-section">
+          <h3 class="about-section-title">Awards & Recognition</h3>
+          <div class="awards-list">
+            {% for award in awards %}
+              <div class="award-item">
+                <div class="award-year">
+                  {% if award.year %}{{ award.year }}{% else %}—{% endif %}
+                </div>
+                <div class="award-details">
+                  <h4 class="award-title">{{ award.title }}</h4>
+                  {% if award.organization %}
+                    <p class="award-organization">{{ award.organization }}</p>
+                  {% endif %}
+                  {% if award.description %}
+                    <p class="award-description">{{ award.description|safe }}</p>
+                  {% endif %}
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+
+        <!-- Teaching Statement Section -->
+        {% if profile.teaching_statement %}
+        <div class="about-teaching-section">
+          <h3 class="about-section-title">Teaching Philosophy</h3>
+          <div class="teaching-statement">
+            {{ profile.teaching_statement|safe }}
+          </div>
+          
+          {% if teaching_places %}
+          <div class="teaching-places-grid">
+            {% for place in teaching_places %}
+              <div class="teaching-place-card">
+                <h4 class="teaching-place-name">{{ place.inst_name }}</h4>
+                {% if place.address %}
+                  <p class="teaching-place-address">{{ place.address }}</p>
+                {% endif %}
+                {% if place.description %}
+                  <p class="teaching-place-description">{{ place.description|safe }}</p>
+                {% endif %}
+                {% if place.website %}
+                  <a href="{{ place.website }}" target="_blank" rel="noopener noreferrer" class="teaching-place-link">
+                    Visit Website →
+                  </a>
+                {% endif %}
+              </div>
+            {% endfor %}
+          </div>
+          {% endif %}
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact Links Section -->
+<section class="about-contact-section">
+  <div class="about-contact-container">
+    <h3 class="about-contact-title">Get In Touch</h3>
+    <div class="about-contact-links">
+      {% if profile.email %}
+        <a href="mailto:{{ profile.email }}" class="contact-link contact-email">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+            <polyline points="22,6 12,13 2,6"></polyline>
+          </svg>
+          <span>Email</span>
+        </a>
+      {% endif %}
+      
+      {% if profile.instagram %}
+        <a href="{{ profile.instagram }}" target="_blank" rel="noopener noreferrer" class="contact-link contact-instagram">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+          </svg>
+          <span>Instagram</span>
+        </a>
+      {% endif %}
+      
+      {% if profile.facebook %}
+        <a href="{{ profile.facebook }}" target="_blank" rel="noopener noreferrer" class="contact-link contact-facebook">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+          </svg>
+          <span>Facebook</span>
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% endblock %}
