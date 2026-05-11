@@ -8,9 +8,7 @@ def home(request):
     featured_artworks = ArtWork.objects.filter(is_published=True, is_featured=True)
     recent_events = Post.objects.filter(
         is_published=True
-    ).exclude(
-        post_type=Post.PostType.NEWS
-    ).order_by('-published_at')[:4]
+    ).order_by('-published_at', '-created_at')
     
     context = {
         'artworks': queryset_artwork,
@@ -29,7 +27,7 @@ def artwork_detail(request, slug):
 
 
 def gallery(request):
-    artworks = ArtWork.objects.filter(is_published=True)
+    artworks = ArtWork.objects.filter(is_published=True).order_by('-year_created')
     series = ArtWorkSeries.objects.filter(is_published=True)
     context = {
         'artworks': artworks,

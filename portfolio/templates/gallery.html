@@ -29,7 +29,7 @@
       {% for artwork in artworks %}
         <a href="{% url 'artwork_detail' artwork.slug %}" 
            class="gallery-item" 
-           data-series="{% if artwork.series %}{{ artwork.series.slug }}{% else %}none{% endif %}">
+           data-series="{% for s in artwork.series.all %}{{ s.slug }} {% endfor %}">
           <div class="gallery-image-wrapper">
             <img src="{{ artwork.image.url }}" alt="{{ artwork.title }}" class="gallery-image" loading="lazy">
             <div class="gallery-overlay">
@@ -66,8 +66,9 @@ document.addEventListener('DOMContentLoaded', function() {
       // Filter items with fade animation
       galleryItems.forEach(item => {
         const itemSeries = item.getAttribute('data-series');
+        const seriesList = itemSeries ? itemSeries.split(' ') : [];
         
-        if (filter === 'all' || itemSeries === filter) {
+        if (filter === 'all' || seriesList.includes(filter)) {
           item.style.display = 'block';
           setTimeout(() => {
             item.style.opacity = '1';

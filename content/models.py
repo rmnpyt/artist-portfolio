@@ -57,7 +57,9 @@ class Post(models.Model):
     class PostType(models.TextChoices):
         NEWS = "news", "News"
         EXHIBITION = "exhibition", "Exhibition"
-        WORKSHOP = "workshop", "Workshop / Group Class"
+        WORKSHOP = "workshop", "Workshop"
+        GROUP_CLASS= "group_class", "Group Class"
+        FESTIVAL = "festival", "Festival"
         PRIVATE_CLASS = "private_class", "Private Class"
         OTHER_EVENT = "other_event", "Other Event"
 

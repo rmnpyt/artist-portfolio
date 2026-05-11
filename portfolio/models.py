@@ -32,11 +32,11 @@ class ArtWork(models.Model):
     slug = models.SlugField(unique=True)
     image = models.ImageField(upload_to='artworks/')
     description = models.TextField()
-    series = models.ForeignKey(
+    series = models.ManyToManyField(
         ArtWorkSeries,
-        on_delete=models.SET_NULL,
+        # on_delete=models.SET_NULL,
         related_name='artworks',
-        null=True,
+        # null=True,
         blank=True
     )
     year_created = models.PositiveIntegerField(blank=True, null=True)

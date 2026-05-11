@@ -15,11 +15,12 @@ class ArtWorkSeriesAdmin(SummernoteModelAdmin):
 class ArtWorkAdmin(SummernoteModelAdmin):
     summernote_fields = ('description',)
     list_display = [
-        'title', 'image_tag', 'series', 'year_created', 'price' 
+        'title', 'image_tag', 'series_list', 'year_created', 'price','is_published', 'is_featured' 
     ]
     list_per_page = 20
-    list_editable = ['price', 'series']
+    list_editable = ['price', 'is_published', 'is_featured']
     list_display_links = ['title']
+    filter_horizontal = ('series',)
     prepopulated_fields = {
         'slug': ['title']
     }
@@ -32,6 +33,10 @@ class ArtWorkAdmin(SummernoteModelAdmin):
                 obj.image.url,
             )
         return '-'
+    
+    @admin.display(description='Series')
+    def series_list(self, obj):
+        return ', '.join([s.title for s in obj.series.all()])
     
 
 

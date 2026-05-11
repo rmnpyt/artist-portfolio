@@ -13,7 +13,7 @@ def main():
     if env_path.exists():
         load_dotenv(env_path)
 
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings_local')
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:

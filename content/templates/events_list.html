@@ -61,7 +61,7 @@
               </h2>
               
               {% if event.excerpt %}
-                <p class="event-excerpt">{{ event.excerpt|truncatewords:30 |safe }}</p>
+                <p class="event-excerpt">{{ event.excerpt|striptags|truncatewords:30 }}</p>
               {% endif %}
               
               <div class="event-footer">
