@@ -65,6 +65,9 @@
 
     <!-- JS -->
     <script src="{% static 'js/base.js' %}"></script>
+    {% if TURNSTILE_SITE_KEY %}
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    {% endif %}
     <!-- Swiper JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <!-- Slider init -->
@@ -126,6 +129,9 @@
             <form class="newsletter-form" method="post" action="{% url 'newsletter_subscribe' %}">
                 {% csrf_token %}
                 <input type="email" name="email" placeholder="Your email" required>
+                {% if TURNSTILE_SITE_KEY %}
+                <div class="cf-turnstile" data-sitekey="{{ TURNSTILE_SITE_KEY }}"></div>
+                {% endif %}
                 <button type="submit">Subscribe</button>
             </form>
         </div>

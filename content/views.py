@@ -7,11 +7,13 @@ def about(request):
     profile = get_object_or_404(ArtistProfile, is_published=True)
     awards = profile.awards.all().order_by('-year', 'title')
     teaching_places = profile.teaching_places.all()
+    sections = profile.sections.filter(is_published=True)
     
     context = {
         'profile': profile,
         'awards': awards,
         'teaching_places': teaching_places,
+        'sections': sections,
     }
     return render(request, 'about.html', context=context)
 

@@ -15,6 +15,10 @@ MAILCHIMP_AUDIENCE_ID = os.environ.get("MAILCHIMP_AUDIENCE_ID", "")
 DATABASE_NAME = os.environ.get("DATABASE_NAME","")
 DATABASE_USER = os.environ.get("DATABASE_USER","")
 DATABASE_PASSWORD = os.environ.get("DATABASE_PASSWORD","")
+TURNSTILE_SITE_KEY = os.environ.get("TURNSTILE_SITE_KEY", "")
+TURNSTILE_SECRET_KEY = os.environ.get("TURNSTILE_SECRET_KEY", "")
+NEWSLETTER_RATE_LIMIT_ATTEMPTS = int(os.environ.get("NEWSLETTER_RATE_LIMIT_ATTEMPTS", "3"))
+NEWSLETTER_RATE_LIMIT_SECONDS = int(os.environ.get("NEWSLETTER_RATE_LIMIT_SECONDS", "3600"))
 
 CSRF_TRUSTED_ORIGINS = [
     'https://azamkashefikia.com',
@@ -58,6 +62,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'marketing.context_processors.newsletter_bot_protection',
             ],
         },
     },
@@ -162,4 +167,4 @@ SUMMERNOTE_CONFIG = {
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 DEFAULT_FORM_EMAIL = "no-reply@azamkashefikia.com"
- 
+

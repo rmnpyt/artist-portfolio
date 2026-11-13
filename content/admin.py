@@ -1,13 +1,20 @@
 from django.contrib import admin
-from .models import ArtistProfile, Post, TeachingPlaces, Award
+from .models import ArtistProfile, Post, TeachingPlaces, Award, ProfileSection
 from django.utils.html import format_html
-from django_summernote.admin import SummernoteModelAdmin
+from django_summernote.admin import SummernoteModelAdmin, SummernoteInlineModelAdmin
 # Register your models here.
+
+class ProfileSectionInline(SummernoteInlineModelAdmin, admin.StackedInline):
+    model = ProfileSection
+    summernote_fields = ['content']
+    extra = 0
+
 
 @admin.register(ArtistProfile)
 class ArtistProfileAdmin(SummernoteModelAdmin):
     list_display = ['full_name', 'portrait_tag', 'created_at', 'is_published']
     summernote_fields = ['short_bio', 'long_bio', 'teaching_statement']
+    inlines = [ProfileSectionInline]
 
     @admin.display(description='Portrait')
     def portrait_tag(self, obj):
@@ -33,6 +40,17 @@ class TeachingPlacesAdmin(SummernoteModelAdmin):
     list_per_page = 10
     def artist_name(self, TeachingPlaces: TeachingPlaces):
         return TeachingPlaces.profile.full_name
+
+
+@admin.register(ProfileSection)
+class ProfileSectionAdmin(SummernoteModelAdmin):
+    list_display = ['title', 'artist_name', 'order', 'is_published']
+    list_editable = ['order', 'is_published']
+    list_per_page = 10
+    summernote_fields = ['content']
+
+    def artist_name(self, obj):
+        return obj.profile.full_name
 
 
 @admin.register(Post)

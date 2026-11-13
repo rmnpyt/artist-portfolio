@@ -96,6 +96,16 @@
           {% endif %}
         </div>
         {% endif %}
+
+        <!-- Optional Extra Sections -->
+        {% for section in sections %}
+        <div class="about-extra-section">
+          <h3 class="about-section-title">{{ section.title }}</h3>
+          <div class="extra-section-content">
+            {{ section.content|safe }}
+          </div>
+        </div>
+        {% endfor %}
       </div>
     </div>
   </div>

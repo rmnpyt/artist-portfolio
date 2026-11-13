@@ -1,0 +1,34 @@
+﻿# Secrets and machine-local settings
+.env
+.env.*
+!.env.example
+config/settings_local.py
+
+# Python and local environments
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Local database and runtime output
+*.sqlite3
+*.log
+staticfiles/
+media/
+
+# Development tools, archives and deployment transcripts
+.vscode/
+.idea/
+zip/
+deploy_chat.json
+deploy_chat.txt
+azamkashefikia.com-bluehost-dns-Zone.txt
+
+# OS files
+.DS_Store
+Thumbs.db

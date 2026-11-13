@@ -27,6 +27,7 @@ class ArtWork(models.Model):
         AVAILABLE = "available", "Available"
         SOLD = "sold", "Sold"
         NOT_FOR_SALE = "not_for_sale", "Not for Sale"
+        STOLEN = "stolen", "Stolen"
 
     title = models.CharField(max_length=255)
     slug = models.SlugField(unique=True)

@@ -53,6 +53,25 @@ class TeachingPlaces(models.Model):
         return self.inst_name
     
 
+class ProfileSection(models.Model):
+    """Optional extra content section on the About page (e.g. 'Artistic Path')."""
+    profile = models.ForeignKey(
+        ArtistProfile,
+        related_name='sections',
+        on_delete=models.CASCADE
+    )
+    title = models.CharField(max_length=255)
+    content = models.TextField()
+    order = models.PositiveIntegerField(default=0)
+    is_published = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ['order', 'id']
+
+    def __str__(self):
+        return self.title
+
+
 class Post(models.Model):
     class PostType(models.TextChoices):
         NEWS = "news", "News"
