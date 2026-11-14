@@ -7,7 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('content', '0002_alter_post_post_type'),
+        ('content', '0004_alter_post_post_type'),
     ]
 
     operations = [

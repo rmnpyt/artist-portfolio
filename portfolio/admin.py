@@ -17,7 +17,7 @@ class ArtWorkAdmin(SummernoteModelAdmin):
     list_display = [
         'title', 'image_tag', 'series_list', 'year_created', 'price','is_published', 'is_featured' 
     ]
-    list_per_page = 20
+    list_per_page = 100
     list_editable = ['price', 'is_published', 'is_featured']
     list_display_links = ['title']
     filter_horizontal = ('series',)
